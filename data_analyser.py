@@ -1,33 +1,80 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import serial
 import time
+# import concurrent.futures
+import threading
 
-from protocol import parse_input
+from telemetry_parser import TelemetryParser, TelemetryData
+class TelemetryReader:
+    def __init__(
+            self,
+            parser: TelemetryParser,
+            port:str, 
+            baudrate:int = 115200,
+            timeout: float = 0.0,
+        ):
+        self.parser = parser
 
-port = "COM4"
-baudrate = 115200
+        self.ser = serial.Serial(port= port, baudrate = baudrate, timeout=timeout)
+        
+        self._latest = None
 
-try:
-    ser = serial.Serial(port,baudrate, timeout=1)
-    time.sleep(2)
+        self._running_flag = False
+        self._thread = None
+        self._lock = threading.Lock()
+    
+    def close(self):
+        if self.ser.is_open:
+            self.ser.close()
+    
+    def _read(self):
+        while self._running_flag:
+            try:
+                if self.ser.is_open:
+                    n = self.ser.in_waiting
+                    if n:
+                        data = self.ser.read(n)
 
-    print(f"Connected with {port}. Waiting for data...")
+                        # parse the data, returns: TelemetryData or None
+                        result = self.parser.parse(data)
+                        if result is not None:
+                            with self._lock:
+                                self._latest = result
 
-    while True:
-        if ser.in_waiting > 0: # if there is data in buff
-            line = ser.readline().decode('utf-8').rstrip()
-            # print(f"Otrzymano: {line}")
-            parsed = parse_input(line)
-            if parsed:
-                print(f"{parsed}")
-except serial.SerialException as e:
-    print(f"Błąd portu: {e}")
-except KeyboardInterrupt:
-    print("\nZatrzymano przez użytkownika.")
-finally:
-    if 'ser' in locals() and ser.is_open:
-        ser.close()
-        print("Port zamknięty.")
+                    else:
+                        data = self.ser.read(1)
 
-   
+            except serial.SerialException as e:
+                self._running_flag = False
+                print(f"Port error: {e}")
+                break                
+            except Exception as e:
+                print(f"Error: {e}")
+
+    def get_latest(self) -> TelemetryData | None:
+        with self._lock:
+            return self._latest
+
+    def start(self):
+        if self._running_flag:
+            return
+        
+        self._running_flag = True
+        self._thread = threading.Thread(target=self._read, daemon=True)
+        self._thread.start()
+
+    def stop(self):
+        self._running_flag = False
+        if self._thread:
+            self._thread.join(timeout=0.1)
+            self._thread = None
+
+        if self.ser.is_open:
+            self.ser.close()
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, *args):
+        self.stop()
+        

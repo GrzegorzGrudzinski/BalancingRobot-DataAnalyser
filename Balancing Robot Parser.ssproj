@@ -1,0 +1,635 @@
+{
+    "actions": [
+    ],
+    "changeDrivenTransforms": false,
+    "controlScriptCode": "/**\n * Control Loop (setup / loop)\n *\n * setup() runs once when the device connects; loop() runs repeatedly while it\n * stays connected. Both can drive the connection through the SerialStudio SDK\n * (for example io.writeData(...)). Pace loop() with delay(ms), like an Arduino\n * sketch. See the Control Loop help page for examples.\n */\n\n/**\n * @brief Runs once, right after the device connects.\n */\nfunction setup() {\n}\n\n/**\n * @brief Runs repeatedly while the device stays connected.\n */\nfunction loop() {\n  delay(10);\n}\n",
+    "customizeWorkspaces": true,
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "datasetId": 0,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": false,
+                    "groupId": 0,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Robot Status",
+                    "uniqueId": 2,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 1,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": false,
+                    "groupId": 0,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Motor Status",
+                    "uniqueId": 8,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 2,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Pitch",
+                    "uniqueId": 9,
+                    "units": "Degree",
+                    "value": "",
+                    "widget": "gauge",
+                    "widgetMax": 180,
+                    "widgetMin": -180,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 3,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Yaw",
+                    "uniqueId": 10,
+                    "units": "Degree",
+                    "value": "",
+                    "widget": "gauge",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 4,
+                    "displayFormat": "0d",
+                    "displayTickCount": 34,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 5,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "M1 Velocity",
+                    "uniqueId": 11,
+                    "units": "M / s",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 5,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 6,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "M1 Position",
+                    "uniqueId": 13,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 6,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 7,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "M1 Current",
+                    "uniqueId": 14,
+                    "units": "Amps",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 7,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 8,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "M2 Velocity",
+                    "uniqueId": 15,
+                    "units": "M / s",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 8,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 9,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "M2 Position",
+                    "uniqueId": 16,
+                    "units": "",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                },
+                {
+                    "datasetId": 9,
+                    "displayFormat": "0d",
+                    "displayTickCount": 5,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "fftWindow": 5,
+                    "graph": true,
+                    "groupId": 0,
+                    "index": 10,
+                    "led": false,
+                    "ledHigh": 80,
+                    "log": false,
+                    "numericValue": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "M2 Current",
+                    "uniqueId": 17,
+                    "units": "Amps",
+                    "value": "",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -2
+                }
+            ],
+            "title": "Dataset Container",
+            "uniqueId": 1,
+            "widget": "datagrid"
+        }
+    ],
+    "hexadecimalDelimiters": true,
+    "nextUniqueId": 23,
+    "plotTimeRange": 10,
+    "pointCount": 100,
+    "schemaVersion": 3,
+    "sources": [
+        {
+            "busType": 0,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "autoReconnect": true,
+                "baudRate": 115200,
+                "dataBitsIndex": 3,
+                "deviceId": {
+                    "portName": "ttyACM0"
+                },
+                "dtr": true,
+                "flowControlIndex": 0,
+                "parityIndex": 0,
+                "portIndex": 1,
+                "stopBitsIndex": 0
+            },
+            "decoder": 3,
+            "decoderMethod": 3,
+            "frameDetection": 3,
+            "frameEnd": "",
+            "frameParserCode": "function parse(frame) {\n    // Serial Studio często USUWA bajt startowy z ramki przed przekazaniem jej tutaj.\n    // Tworzymy więc własny bufor na równe 36 bajtów.\n    var uint8 = new Uint8Array(36);\n    \n    if (frame.length === 36 && frame[0] === 0xCC) {\n        // Wariant 1: Program nie usunął bajtu startowego\n        for (var i = 0; i < 36; i++) uint8[i] = frame[i];\n    } \n    else if (frame.length >= 35) {\n        // Wariant 2: Program usunął 'CC'. Ramka ma 35 bajtów i zaczyna się od robot_status.\n        uint8[0] = 0xCC; // Ręcznie wstawiamy utracony bajt startowy\n        for (var i = 0; i < 35; i++) {\n            uint8[i+1] = frame[i];\n        }\n    } \n    else {\n        // Zbyt mało danych, czekamy na kolejny pakiet\n        return [];\n    }\n    \n    // WERYFIKACJA SUMY KONTROLNEJ \n    // Tymczasowo wyłączona (zakomentowana), aby na 100% przepuścić pierwsze dane na wykresy. \n    // Gdy zobaczysz, że wykresy działają, możesz usunąć znak komentarzy.\n    /*\n    var calcChecksum = 0;\n    for(var i = 0; i < 35; i++) calcChecksum ^= uint8[i];\n    if (calcChecksum !== uint8[35]) return [];\n    */\n    \n    var view = new DataView(uint8.buffer);\n    \n    // Zwracamy tablicę. Serial Studio samo przekaże ją do zdefiniowanych widgetów!\n    return [\n        uint8[1],                 // robot_status\n        uint8[2],                 // motor_status\n        view.getFloat32(3, true), // angle_pitch\n        view.getFloat32(7, true), // angle_yaw\n        view.getFloat32(11, true),// mot1_vel\n        view.getFloat32(15, true),// mot1_pos\n        view.getFloat32(19, true),// mot1_A\n        view.getFloat32(23, true),// mot2_vel\n        view.getFloat32(27, true),// mot2_pos\n        view.getFloat32(31, true) // mot2_A\n        // uint8[32]        // checksum\n    ];\n}",
+            "frameParserParams": {
+                "quoteChar": "",
+                "separator": ",",
+                "skipEmpty": false,
+                "trimFields": false
+            },
+            "frameParserTemplate": "delimited",
+            "frameStart": "CC",
+            "hexadecimalDelimiters": true,
+            "sourceId": 0,
+            "title": "STM Master"
+        }
+    ],
+    "title": "Balancing Robot Parser",
+    "treeExpansion": {
+        "": false,
+        "Balancing Robot Parser": true,
+        "Balancing Robot Parser/ ": false,
+        "Balancing Robot Parser/Control Loop": false,
+        "Balancing Robot Parser/Dashboard Widgets": true,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container": true,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/M1 Current": false,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/M1 Position": false,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/M1 Velocity": false,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/M2 Current": false,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/M2 Position": false,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/M2 Velocity": false,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/Motor Status": false,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/Pitch": false,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/Robot Status": false,
+        "Balancing Robot Parser/Dashboard Widgets/Dataset Container/Yaw": false,
+        "Balancing Robot Parser/STM Master": true,
+        "Balancing Robot Parser/STM Master/Frame Parser": false,
+        "Balancing Robot Parser/Workspaces": true,
+        "Balancing Robot Parser/Workspaces/Dataset Container": false
+    },
+    "widgetSettings": {
+        "10:0:10": {
+            "page": 1
+        },
+        "10:0:7": {
+            "page": 0
+        },
+        "11:0:3": {
+            "page": 1
+        },
+        "12:0:3": {
+            "page": 0
+        },
+        "13:0:5": {
+            "page": 1
+        },
+        "9:0:10": {
+            "interpolationMode": 2,
+            "showAreaUnderPlot": false
+        },
+        "9:0:3": {
+            "interpolationMode": 1,
+            "showAreaUnderPlot": false
+        },
+        "9:0:4": {
+            "showAreaUnderPlot": false
+        },
+        "9:0:5": {
+            "interpolationMode": 1,
+            "showAreaUnderPlot": false
+        },
+        "9:0:6": {
+            "showAreaUnderPlot": true
+        },
+        "9:0:7": {
+            "showAreaUnderPlot": false
+        },
+        "9:0:8": {
+            "showAreaUnderPlot": false
+        },
+        "activeGroup": 5000,
+        "externalWindows": {
+            "data": [
+            ]
+        },
+        "layout:5000": {
+            "data": {
+                "autoLayout": true,
+                "canvasHeight": 883,
+                "canvasWidth": 1922,
+                "geometries": [
+                    {
+                        "height": 442,
+                        "id": 1,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 1,
+                        "width": 385,
+                        "x": 0,
+                        "y": 0
+                    },
+                    {
+                        "height": 442,
+                        "id": 4,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 385,
+                        "x": 384,
+                        "y": 0
+                    },
+                    {
+                        "height": 442,
+                        "id": 6,
+                        "relativeIndex": 2,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 384,
+                        "x": 768,
+                        "y": 0
+                    },
+                    {
+                        "height": 442,
+                        "id": 8,
+                        "relativeIndex": 4,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 384,
+                        "x": 1151,
+                        "y": 0
+                    },
+                    {
+                        "height": 442,
+                        "id": 7,
+                        "relativeIndex": 3,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 384,
+                        "x": 1534,
+                        "y": 0
+                    },
+                    {
+                        "height": 441,
+                        "id": 12,
+                        "relativeIndex": 0,
+                        "state": "normal",
+                        "widgetType": 11,
+                        "width": 385,
+                        "x": 0,
+                        "y": 441
+                    },
+                    {
+                        "height": 441,
+                        "id": 5,
+                        "relativeIndex": 1,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 385,
+                        "x": 384,
+                        "y": 441
+                    },
+                    {
+                        "height": 441,
+                        "id": 9,
+                        "relativeIndex": 5,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 384,
+                        "x": 768,
+                        "y": 441
+                    },
+                    {
+                        "height": 441,
+                        "id": 11,
+                        "relativeIndex": 7,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 384,
+                        "x": 1151,
+                        "y": 441
+                    },
+                    {
+                        "height": 441,
+                        "id": 10,
+                        "relativeIndex": 6,
+                        "state": "normal",
+                        "widgetType": 9,
+                        "width": 384,
+                        "x": 1534,
+                        "y": 441
+                    }
+                ],
+                "userReordered": true,
+                "windowOrder": [
+                    1,
+                    4,
+                    6,
+                    8,
+                    7,
+                    12,
+                    5,
+                    9,
+                    11,
+                    10
+                ],
+                "windowOrderTyped": [
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 1
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 2,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 4,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 3,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 0,
+                        "widgetType": 11
+                    },
+                    {
+                        "relativeIndex": 1,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 5,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 7,
+                        "widgetType": 9
+                    },
+                    {
+                        "relativeIndex": 6,
+                        "widgetType": 9
+                    }
+                ]
+            }
+        }
+    },
+    "workspaces": [
+        {
+            "title": "Dataset Container",
+            "widgetRefs": [
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 1,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 2,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 3,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 4,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 5,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 6,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 7,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 11
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 13
+                }
+            ],
+            "workspaceId": 5000
+        }
+    ],
+    "writerVersion": "4.0.3",
+    "writerVersionAtCreation": "4.0.3"
+}
