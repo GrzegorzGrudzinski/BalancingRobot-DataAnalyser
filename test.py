@@ -5,8 +5,6 @@ import time
 
 from protocol import parse_input
 
-
-
 # --- TEST ---
 ''' Generate input strings using variables '''
 # Example variables you can change programmatically
