@@ -1,113 +1,3 @@
-# """
-# telemetry_frame.py - parser of the STM32 -> PC telemetry frame (TELEMETRY_VERSION = 3)
-
-# Must match TelemetryPacket_t in pc_telemetry.h (little endian, packed, 169 bytes).
-# """
-# import struct
-
-# START_BYTE = 0xCC
-# VERSION = 4
-
-# # (name, struct format) in the exact order of the C struct
-# _FIELDS = [
-#     # header
-#     ("start", "B"), ("version", "B"), ("sequence", "I"), ("timestamp_ms", "I"),
-#     # diagnostics
-#     ("robot_state", "B"), ("motor_status", "B"), ("motor_error", "B"),
-#     ("loop_overrun_count", "H"), ("uart_error_count", "H"), ("feedback_rx_count", "H"),
-#     ("feedback_crc_error_count", "H"), ("feedback_lost_count", "H"), ("cmd_drop_count", "H"),
-#     ("imu_error_count", "H"), ("telemetry_drop_count", "H"),
-#     # STM <-> ESP link (esp_time_us is the ESP clock - not synchronised, use deltas)
-#     ("cmd_seq", "H"), ("ack_seq", "H"), ("esp_tx_seq", "H"),
-#     ("fb_age_us", "H"), ("rtt_us", "H"),
-#     # IMU_Sample_t [g], [deg/s]
-#     ("acc_x", "f"), ("acc_y", "f"), ("acc_z", "f"),
-#     ("gyro_x", "f"), ("gyro_y", "f"), ("gyro_z", "f"),
-#     # ControlState_t (observed)
-#     ("pitch", "f"), ("pitch_rate", "f"), ("yaw", "f"), ("yaw_rate", "f"),
-#     ("position", "f"), ("velocity", "f"), ("left_wheel_pos", "f"), ("right_wheel_pos", "f"),
-#     # wheels
-#     ("mot1_vel", "f"), ("mot2_vel", "f"), ("mot1_A", "f"), ("mot2_A", "f"),
-#     # TargetState_t
-#     ("target_pitch", "f"), ("target_yaw", "f"), ("target_position", "f"), ("target_velocity", "f"),
-#     # ControlDebug_t
-#     ("position_output", "f"), ("velocity_output", "f"), ("pitch_setpoint", "f"), ("pitch_output", "f"),
-#     ("i_position", "f"), ("i_velocity", "f"), ("i_pitch", "f"),
-#     # command sent to the motors
-#     ("out_l", "f"), ("out_r", "f"),
-#     ("checksum", "B"),
-# ]
-# NAMES = [n for n, _ in _FIELDS]
-# _STRUCT = struct.Struct("<" + "".join(f for _, f in _FIELDS))
-# FRAME_SIZE = _STRUCT.size
-# assert FRAME_SIZE == 164, FRAME_SIZE
-
-
-# def checksum(frame: bytes) -> int:
-#     """XOR of all bytes except the last one (same as calculate_checksum() in the firmware)."""
-#     c = 0
-#     for b in frame[:-1]:
-#         c ^= b
-#     return c
-
-
-# def parse_frame(frame: bytes) -> dict:
-#     d = dict(zip(NAMES, _STRUCT.unpack(frame)))
-#     if d["checksum"] != checksum(frame):
-#         raise ValueError("bad checksum")
-#     if d["version"] != VERSION:
-#         raise ValueError(f"unsupported telemetry version {d['version']}")
-#     return d
-
-
-# class FrameStream:
-#     """Feed it raw bytes from the serial port; returns complete, valid frames.
-#     Resynchronises on 0xCC + checksum, so stray ASCII (printf) in the stream is harmless."""
-
-#     def __init__(self):
-#         self._buf = bytearray()
-#         self.bad_frames = 0
-
-#     def feed(self, data: bytes):
-#         self._buf += data
-#         out = []
-#         while True:
-#             i = self._buf.find(bytes([START_BYTE]))
-#             if i < 0:
-#                 self._buf.clear()
-#                 break
-#             del self._buf[:i]
-#             if len(self._buf) < FRAME_SIZE:
-#                 break
-#             frame = bytes(self._buf[:FRAME_SIZE])
-#             try:
-#                 out.append(parse_frame(frame))
-#                 del self._buf[:FRAME_SIZE]
-#             except ValueError:
-#                 self.bad_frames += 1
-#                 del self._buf[:1]          # false start byte - slide by one
-#         return out
-
-
-# if __name__ == "__main__":
-#     # usage: python telemetry_frame.py "/dev/ttyACM0"   (pip install pyserial)
-#     import sys
-#     import serial
-#     port = sys.argv[1] if len(sys.argv) > 1 else "/dev/ttyACM0"
-#     stream = FrameStream()
-#     last_seq = None
-#     with serial.Serial(port, 115200, timeout=0.1) as ser:
-#         while True:
-#             for f in stream.feed(ser.read(4096)):
-#                 if last_seq is not None and f["sequence"] != last_seq + 1:
-#                     print(f"!! gap: {last_seq} -> {f['sequence']}")
-#                 last_seq = f["sequence"]
-#                 print(f"{f['sequence']:8d} pitch={f['pitch']:7.2f} out=({f['out_l']:6.3f},{f['out_r']:6.3f}) "
-#                       f"state={f['robot_state']} err={f['motor_error']}")
-
-
-
-#!/usr/bin/env python3
 """
 telemetry_frame.py - parser + terminal monitor for the STM32 -> PC telemetry frame.
 
@@ -165,7 +55,7 @@ assert FRAME_SIZE == EXPECTED_SIZE, f"parser layout is {FRAME_SIZE} B, C struct 
 # ------------------------------------------------------------------------------------------
 # Names (must match the firmware enums)
 # ------------------------------------------------------------------------------------------
-ROBOT_STATES = {0: "STANDBY", 1: "INIT", 2: "IDLE", 3: "BALANCING", 4: "FALLEN", 5: "ERROR"}
+ROBOT_STATES = {0: "STANDBY", 1: "CONNECT", 2: "INIT", 3: "BALANCING", 4: "FALLEN", 5: "ERROR", 6: "STOP"}
 CMD_NAMES = {0xFA: "HELLO_MOTOR", 0xAF: "HELLO_MASTER", 0xDD: "START_INIT", 0x01: "INIT",
              0x10: "START", 0x11: "SET_VAL", 0x20: "STOP", 0x50: "CLR_FLT", 0x51: "RESET",
              0x60: "ERROR", 0x00: "NONE"}
@@ -175,9 +65,10 @@ ERR_NAMES = {0: "OK", 1: "INIT_FAILED", 2: "COMMUNICATION_ERROR", 3: "INVALID_CO
 # what the STM state machine (robot_app.c) is waiting for in each state
 WAITING_FOR = {
     "STANDBY": "button press (sends START_INIT to the ESP)",
-    "INIT": "HELLO_MOTOR from the ESP",
-    "IDLE": "START from the ESP (STM keeps sending INIT)",
+    "CONNECT": "HELLO_MOTOR from the ESP",
+    "INIT": "START from the ESP (STM keeps sending INIT)",
     "ERROR": "button press (sends CLR_FLT) and CLR_FLT ack from the ESP",
+    "STOP": "STOP ack from the ESP"
 }
 COUNTERS = ["loop_overrun_count", "uart_error_count", "feedback_crc_error_count",
             "feedback_lost_count", "cmd_drop_count", "imu_error_count", "telemetry_drop_count"]
@@ -301,13 +192,10 @@ class Monitor:
         if 0 < crc < 0x8000:
             return ("feedback checksum errors are increasing: FeedbackPacket_t layout/size differs between "
                     "ESP and STM, or the UART is noisy")
-        if f["motor_error"] != 0 and s in ("INIT", "IDLE"):
-            return (f"the ESP reports {err_name(f['motor_error'])} but the STM does not react to errors in {s} "
-                    f"-> it waits forever (add an error check for INIT/IDLE in RobotUpdate)")
-        if s == "IDLE" and f["motor_status"] == 0xFA:
+        if s == "INIT" and f["motor_status"] == 0xFA:
             return "the ESP still says HELLO_MOTOR: it is not seeing CMD_INIT (MotorPacket_t layout? ESP state?)"
-        if s == "IDLE" and f["motor_status"] in (0x10, 0x11):
-            return "the ESP already runs (START/SET_VAL) - the STM should leave IDLE; check the condition in robot_app.c"
+        if s == "INIT" and f["motor_status"] in (0x10, 0x11):
+            return "the ESP already runs (START/SET_VAL) - the STM should leave INIT; check the condition in robot_app.c"
         return ""
 
     def _summary(self, f, tag, t):
