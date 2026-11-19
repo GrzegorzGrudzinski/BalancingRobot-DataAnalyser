@@ -18,7 +18,7 @@ import time
 
 START_BYTE = 0xCC
 HAS_VERSION = True     # True -> frame has a `version` byte after startByte (164 B)
-VERSION = 4
+VERSION = 5
 
 # ------------------------------------------------------------------------------------------
 # Frame layout: (section, [(name, struct format), ...]) in the exact order of the C struct
@@ -41,7 +41,7 @@ _SECTIONS = [
     ("target", [("target_pitch", "f"), ("target_yaw", "f"), ("target_position", "f"),
                 ("target_velocity", "f")]),
     ("controller", [("position_output", "f"), ("velocity_output", "f"), ("pitch_setpoint", "f"),
-                    ("pitch_output", "f"), ("i_position", "f"), ("i_velocity", "f"), ("i_pitch", "f")]),
+                    ("pitch_output", "f"), ("yaw_output","f"), ("i_position", "f"), ("i_velocity", "f"), ("i_pitch", "f")]),
     ("output", [("out_l", "f"), ("out_r", "f")]),
     ("tail", [("checksum", "B")]),
 ]
@@ -49,7 +49,7 @@ _FIELDS = [fld for _, flds in _SECTIONS for fld in flds]
 NAMES = [n for n, _ in _FIELDS]
 _STRUCT = struct.Struct("<" + "".join(f for _, f in _FIELDS))
 FRAME_SIZE = _STRUCT.size
-EXPECTED_SIZE = 164 if HAS_VERSION else 163
+EXPECTED_SIZE = 168 if HAS_VERSION else 167
 assert FRAME_SIZE == EXPECTED_SIZE, f"parser layout is {FRAME_SIZE} B, C struct is {EXPECTED_SIZE} B"
 
 # ------------------------------------------------------------------------------------------
